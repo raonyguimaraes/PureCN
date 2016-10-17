@@ -1,0 +1,44 @@
+\name{findBestNormal}
+\alias{findBestNormal}
+\title{Find best normal sample in database}
+\description{Function to find the best matching normal for a provided 
+tumor sample.}
+\usage{findBestNormal(tumor.coverage.file, normalDB, pcs = 1:3, 
+    num.normals = 1, ignore.sex = FALSE, sex = NULL, 
+    normal.coverage.files = NULL, verbose = TRUE)}
+\arguments{
+  \item{tumor.coverage.file}{GATK coverage file of a tumor sample.}
+  \item{normalDB}{Database of normal samples, created with 
+\code{\link{createNormalDatabase}}.}
+  \item{pcs}{Principal components to use for distance calculation.}
+  \item{num.normals}{Return the \code{num.normals} best normals.}
+  \item{ignore.sex}{If \code{FALSE}, detects sex of sample and returns best normals
+with matching sex.}
+  \item{sex}{Sex of sample. If \code{NULL}, determine with 
+\code{\link{getSexFromCoverage}} and default parameters.
+Valid values are \code{F} for female, \code{M} for male. If all 
+chromosomes are diploid, specify \code{diploid}. }
+  \item{normal.coverage.files}{Only consider these normal samples. If \code{NULL}, use all in 
+the database. Must match \code{normalDB$normal.coverage.files}. }
+  \item{verbose}{Verbose output.}
+}
+
+\value{Filename of the best matching normal.}
+
+\author{Markus Riester}
+
+
+
+\seealso{\code{\link{createNormalDatabase} \link{getSexFromCoverage}}}
+\examples{
+normal.coverage.file <- system.file("extdata", "example_normal.txt", 
+    package="PureCN")
+normal2.coverage.file <- system.file("extdata", "example_normal2.txt", 
+    package="PureCN")
+normal.coverage.files <- c(normal.coverage.file, normal2.coverage.file)
+normalDB <- createNormalDatabase(normal.coverage.files)
+
+tumor.coverage.file <- system.file("extdata", "example_tumor.txt", 
+    package="PureCN")
+best.normal.coverage.file <- findBestNormal(tumor.coverage.file, normalDB)
+}

@@ -1,0 +1,39 @@
+\name{createTargetWeights}
+\alias{createTargetWeights}
+\title{Calculate target weights}
+\description{Creates a target weight file useful for segmentation. Requires a
+set of GATK coverage files from normal samples. A small number of 
+tumor (or other normal) samples is then tested against all normals. Target
+weights will be set proportional to the inverse of coverage standard
+deviation across all normals. Targets with high variance in coverage in the
+pool of normals are thus down-weighted.}
+\usage{createTargetWeights(tumor.coverage.files, normal.coverage.files, 
+    target.weight.file, verbose = TRUE)}
+\arguments{
+  \item{tumor.coverage.files}{A small number (1-3) of GATK tumor or normal coverage samples.}
+  \item{normal.coverage.files}{A large number of GATK normal coverage samples (>20) 
+to estimate target log-ratio standard deviations.
+Should not overlap with files in \code{tumor.coverage.files}.}
+  \item{target.weight.file}{Output filename.}
+  \item{verbose}{Verbose output.}
+}
+
+\value{A \code{data.frame} with target weights.}
+
+\author{Markus Riester}
+
+
+
+
+\examples{
+target.weight.file <- "target_weights.txt"
+normal.coverage.file <- system.file("extdata", "example_normal.txt", 
+    package="PureCN")
+normal2.coverage.file <- system.file("extdata", "example_normal2.txt", 
+    package="PureCN")
+normal.coverage.files <- c(normal.coverage.file, normal2.coverage.file)
+tumor.coverage.file <- system.file("extdata", "example_tumor.txt", 
+    package="PureCN")
+
+createTargetWeights(tumor.coverage.file, normal.coverage.files, target.weight.file)
+}

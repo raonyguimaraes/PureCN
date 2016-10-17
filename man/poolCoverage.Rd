@@ -1,0 +1,36 @@
+\name{poolCoverage}
+\alias{poolCoverage}
+\title{Pool coverage from multiple samples}
+\description{Averages the coverage of a list of samples.}
+\usage{poolCoverage(all.data, remove.chrs = c(), w = NULL)}
+\arguments{
+  \item{all.data}{List of normals, read with \code{\link{readCoverageGatk}}.}
+  \item{remove.chrs}{Remove these chromosomes from the pool.}
+  \item{w}{\code{numeric(length(all.data))} vector of weights. If 
+\code{NULL}, weight all samples equally.}
+}
+
+\value{A \code{data.frame} with the averaged coverage over all normals.}
+
+\author{Markus Riester}
+
+
+
+\seealso{\code{\link{readCoverageGatk}}}
+\examples{
+normal.coverage.file <- system.file("extdata", "example_normal.txt", 
+    package="PureCN")
+normal2.coverage.file <- system.file("extdata", "example_normal2.txt", 
+    package="PureCN")
+normal.coverage.files <- c(normal.coverage.file, normal2.coverage.file)
+tumor.coverage.file <- system.file("extdata", "example_tumor.txt", 
+    package="PureCN")
+
+normalDB <- createNormalDatabase(normal.coverage.files)
+
+# get the best 2 normals and average them
+best.normal.coverage.files <- findBestNormal(tumor.coverage.file, normalDB, 
+    num.normals=2)
+pool <- poolCoverage(lapply(best.normal.coverage.files, readCoverageGatk),
+     remove.chrs=c('chrX', 'chrY'))
+}
